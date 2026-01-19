@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>DermalScan – Skin Analysis</title>
@@ -19,11 +19,7 @@
         <button type="submit">🔍 Analyze Image</button>
     </form>
 
-<!-- {% if annotated_img %}
-    <h3>Annotated Result</h3>
-    <img src="{{ annotated_img }}">
-{% endif %}
- -->
+
 {% if annotated_img %}
     <div class="preview">
         <h3>Annotated Image</h3>
@@ -52,6 +48,71 @@
                 <p>{{ class_names[i] }} : {{ "%.2f"|format(probs[i] * 100) }}%</p>
             {% endfor %}
         </div>
+    {% endif %}
+</div>
+
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>DermalScan – Skin Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h1>🧴 DermalScan</h1>
+    <p class="subtitle">AI-powered skin condition analyzer</p>
+
+    <form method="POST" enctype="multipart/form-data">
+        <div class="upload-box">
+            <input type="file" name="image" required>
+            <p>Click to upload an image</p>
+        </div>
+
+        <button type="submit">🔍 Analyze Image</button>
+    </form>
+
+    <br>
+
+    <a href="/webcam">
+        <button type="button">📷 Capture from Webcam</button>
+    </a>
+
+    {% if annotated_img %}
+        <div class="preview">
+            <h3>Annotated Image</h3>
+            <img src="{{ annotated_img }}" style="max-width:300px;">
+            <br><br>
+
+            <a href="{{ annotated_img }}" download>
+                <button>⬇️ Download Annotated Image</button>
+            </a>
+        </div>
+    {% endif %}
+
+    {% if result %}
+        <div class="result">
+            <h2>Result</h2>
+            <p><strong>Prediction:</strong> {{ result }}</p>
+            <p><strong>Confidence:</strong> {{ "%.2f"|format(confidence * 100) }}%</p>
+
+            {% if warning %}
+                <p class="warning">{{ warning }}</p>
+            {% endif %}
+
+            <h3>Class Probabilities</h3>
+            {% for i in range(class_names|length) %}
+                <p>{{ class_names[i] }} : {{ "%.2f"|format(probs[i] * 100) }}%</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if warning and not result %}
+        <p class="warning">{{ warning }}</p>
     {% endif %}
 </div>
 
